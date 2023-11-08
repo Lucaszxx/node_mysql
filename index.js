@@ -20,7 +20,16 @@ app.use(express.json());
 
 //rotas
 app.get("/", (req, res) => {
-    res.render("home") 
+    const query = "SELECT * FROM books"
+    conn.query(query, (error, data) => {
+        if(error) {
+            return console.log(error)
+        }
+
+        const books = data
+        res.render("home",  { books }) 
+    })
+
 })
 
 app.get("/register", (req, res) => {
