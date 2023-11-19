@@ -32,6 +32,41 @@ app.get("/", (req, res) => {
 
 })
 
+app.get("/edit/:id", (req, res) => {
+    const id = req.params.id
+    const sql = `
+        SELECT * FROM books
+        WHERE id = ${id}
+    `
+
+    conn.query(sql, (error, data) => {
+        if(error) {
+            return console.log(error)
+        }
+
+        const book = data[0]
+
+        res.render('edit', {book})
+    })
+})
+
+app.post("/edit/save", (req, res) => {
+    const { id, title, pageqty } = req.body
+
+    const sql = `
+        UPDATE books
+        SET title = '${title}', pageqty = '${pageqty}'
+        WHERE id = ${id}
+    `
+    conn.query(sql, (error) => {
+        if (error) {
+            return console.log(error)
+        }
+
+        res.redirect("/")
+    })
+})
+
 app.get("/book/:id", (req, res) => {
     const id = req.params.id
 
